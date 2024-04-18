@@ -1,14 +1,46 @@
 <template>
-    <div class="item-container">
-        <h2>Say hello</h2>
+    <div class="item-container" @click="toggle">
+        <h2>{{ data.todo }}</h2>
         <div class="checkbox">
-
+            <img src="../images/check.png" alt="" v-if="data.done">
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 
+const props = defineProps({
+    data: Object,
+    handler: Function
+})
+
+const toggleCompletion = async (item) => {
+    
+    try {
+        const response = await fetch('https://2nlzpxbzp3.execute-api.us-east-1.amazonaws.com/toggle', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to toggle item');
+        }
+        
+        console.log('toggled successfully');
+    } catch (error) {
+        console.error('There was a problem toggling the item:', error);
+    }
+};
+
+const toggle = async() =>{
+    const dataToSend = props.data
+    await toggleCompletion(dataToSend);
+    props.handler();
+}
 </script>
 
 <style lang="css" scoped>
@@ -21,27 +53,14 @@
     align-items: center;
     cursor: pointer;
     position: relative;
-}
-
-.item-container::after {
-    content: ''; /* Add this line to create a pseudo-element */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%; /* Adjusted height */
-    background-color: rgba(0, 0, 0, 0.10);
-    transition: width 0.2s ease; /* Simplified transition property */
-    z-index: -1; /* Added z-index to position the pseudo-element behind the content */
-}
-
-.item-container:hover::after {
-    width: 100%; 
+    margin-bottom: 24px;
+    animation: slide 0.3s;
 }
 
 .item-container h2{
     font-size: 24px;
     font-weight: 500;
+    max-width: 400px;
     margin-left: 40px;
     
 }
@@ -50,5 +69,29 @@
     height: 20px;
     border: 2px solid #000;
     margin-right: 25px;
+    position: relative;
+}
+
+.checkbox img{
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    width: 24px;
+    height: auto;
+}
+
+
+@keyframes slide {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    80% {
+        transform: translateX(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 </style>
