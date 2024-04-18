@@ -4,6 +4,7 @@
         <div class="checkbox">
             <img src="../images/check.png" alt="" v-if="data.done">
         </div>
+        <div class="done" v-if="data.done"></div>
     </div>
 </template>
 
@@ -78,6 +79,15 @@ const toggle = async() =>{
     left: -2px;
     width: 24px;
     height: auto;
+}
+
+.done{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #00000023;
 }
 
 
