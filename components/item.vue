@@ -19,6 +19,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.item-container::after {
+    content: ''; /* Add this line to create a pseudo-element */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%; /* Adjusted height */
+    background-color: rgba(0, 0, 0, 0.10);
+    transition: width 0.2s ease; /* Simplified transition property */
+    z-index: -1; /* Added z-index to position the pseudo-element behind the content */
+}
+
+.item-container:hover::after {
+    width: 100%; 
 }
 
 .item-container h2{

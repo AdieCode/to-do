@@ -13,6 +13,8 @@
 <script setup>
 import { ref } from 'vue';
 
+ let listData = ref([])
+
 const fetchData = async () => {
     try {
         const stacks = await getStacks(); // Wait for getStacks to resolve
@@ -25,7 +27,7 @@ const getStacks = async () => {
     let responseData = {};
 
     try {
-        const response = await fetch('https://personal-buget-manager-api-part-2.onrender.com/stacks');
+        const response = await fetch('https://2nlzpxbzp3.execute-api.us-east-1.amazonaws.com/todos');
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -77,10 +79,6 @@ h1{
     font-weight: 400;
 }
 
-/* .list{
-
-} */
-
 .add{
     min-width: 120px;
     min-height: 50px;
@@ -92,5 +90,8 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    cursor: pointer;
 }
+
 </style>
